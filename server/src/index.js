@@ -15,9 +15,7 @@ export const SECRET_KEY = process.env.SECRET_KEY || "!@afdsjg3worrewrjkt23o4rewk
 
 const expiryDate = new Date(Date.now() + 60 * 60 * 1000);
 
-app.get('/', (req, res) => {
-    res.send("Hello World!")
-});
+app.use(express.static("build"));
 
 authRoutes(app);
 simpleHelpRoutes(app);

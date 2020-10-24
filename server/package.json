@@ -23,5 +23,6 @@
   "scripts": {
     "start": "yarn concurrently \"yarn run rollup --config rollup.config.js --watch\" \"yarn run forever -w bundle.js\"",
     "run": "node src/index.js"
-  }
+  },
+  "type": "module"
 }

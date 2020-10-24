@@ -1,2 +1,2 @@
 deploy: build.sh
-web: (cd client && yarn run)
+web: (cd client && npm run)

@@ -4,5 +4,4 @@ export default {
         file: 'bundle.js',
         format: 'cjs'
     },
-    plugins: [flow({all: true})]
 };

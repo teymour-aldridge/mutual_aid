@@ -4,12 +4,12 @@
   "main": "src/index.js",
   "license": "MIT",
   "dependencies": {
-    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cookie-session": "^1.4.0",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
+    "node-bcrypt": "^0.0.1",
     "pg": "^8.4.1",
     "sequelize": "^6.3.5"
   },

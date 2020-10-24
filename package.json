@@ -1,0 +1,11 @@
+{
+  "name": "mutual-aid",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/teymour-aldridge/mutual_aid",
+  "author": "teymour-aldridge <teymour.aldridge@icloud.com>",
+  "license": "AGPL",
+  "scripts": {
+    "postinstall": "cd client && yarn install"
+  }
+}

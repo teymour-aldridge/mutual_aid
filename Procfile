@@ -1,1 +1,1 @@
-web: (cd server && node bundle.js)
+web: (cd server && node src/index.js)

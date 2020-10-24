@@ -1,5 +1,3 @@
-let flow = require('rollup-plugin-flow');
-
 export default {
     input: 'src/index.js',
     output: {

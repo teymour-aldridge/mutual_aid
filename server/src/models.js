@@ -5,11 +5,11 @@ export const sequelize = new Sequelize(process.env.DATABASE_URL, {dialect: "post
 export const saltRounds = 10;
 
 export class User extends Model {
-    async setPassword(self, password: String) {
+    async setPassword(self, password) {
         self.password = await bcrypt.hash(password, saltRounds);
     }
 
-    async checkPassword(self, password: String): Boolean {
+    async checkPassword(self, password) {
         await bcrypt.compare(password, self.password);
     }
 }

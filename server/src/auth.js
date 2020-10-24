@@ -4,7 +4,7 @@ import {Op} from "sequelize";
 import {saltRounds, User} from "./models";
 import {databaseError, notAllParametersSupplied} from "./errors";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import bcrypt from "node-bcrypt";
 
 /**
  * Why does this language not have integers?

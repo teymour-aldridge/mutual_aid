@@ -1,2 +1,2 @@
 deploy: build.sh
-web: (cd client && node bundle.js)
+web: (cd server && node bundle.js)

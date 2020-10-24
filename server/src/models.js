@@ -72,6 +72,10 @@ ComplexHelp.init({
     description: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    completed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
     }
 }, {
     sequelize,
@@ -93,10 +97,16 @@ ComplexHelpLocation.init({
     latitude: {type: DataTypes.DECIMAL(11, 2), allowNull: false},
     longitude: {type: DataTypes.DECIMAL(11, 2), allowNull: false},
     step: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false
     },
     complexHelp: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    completed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false
     }
 }, {
     sequelize,

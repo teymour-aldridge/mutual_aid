@@ -1,8 +1,7 @@
-import {jsonParser, SECRET_KEY} from "./index";
-import {Request} from 'express';
+import {jsonParser, SECRET_KEY} from "./index.js";
 import {Op} from "sequelize";
-import {saltRounds, User} from "./models";
-import {databaseError, notAllParametersSupplied} from "./errors";
+import {saltRounds, User} from "./models.js";
+import {databaseError, notAllParametersSupplied} from "./errors.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "node-bcrypt";
 

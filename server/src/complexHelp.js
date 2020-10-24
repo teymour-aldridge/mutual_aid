@@ -1,8 +1,8 @@
-import {jsonParser, SECRET_KEY} from "./index";
+import {jsonParser, SECRET_KEY} from "./index.js";
 import jwt from "express-jwt";
-import {ComplexHelp, ComplexHelpLocation} from "./models";
+import {ComplexHelp, ComplexHelpLocation} from "./models.js";
 import sequelize from "sequelize";
-import {databaseError, notAllParametersSupplied} from "./errors";
+import {authenticationError, databaseError, notAllParametersSupplied} from "./errors.js";
 import {Op} from "sequelize";
 
 export default function (app) {
@@ -13,7 +13,8 @@ export default function (app) {
             let userId = req.user.id;
             ComplexHelp.create({
                 requestingUserId: userId,
-                description
+                description,
+                completed: false
             }).then(complexHelp => {
                 ComplexHelpLocation.bulkCreate(steps.map(step => {
                     return {
@@ -29,7 +30,6 @@ export default function (app) {
                 databaseError(error, res);
             });
         });
-
     app.post("/complexhelp/list", jsonParser, jwt({secret: SECRET_KEY, algorithms: ["HS256"]}), (req, res) => {
         let latitude = req.body.latitude;
         let longitude = req.body.longitude;
@@ -66,7 +66,30 @@ export default function (app) {
             databaseError(error, res);
         });
     });
-
+    app.post("/complexhelp/complete/:complexHelpId", jsonParser, jwt({
+        secret: SECRET_KEY,
+        algorithms: ["HS256"]
+    }), (req, res) => {
+        let userId = req.user.id;
+        let complexHelpId = req.params["complexHelpId"];
+        ComplexHelp.findByPk(complexHelpId).then(complexHelp => {
+            if (complexHelp.fulfillingUserId === userId) {
+                ComplexHelp.update({completed: true}, {
+                    where: {
+                        id: complexHelp.id
+                    }
+                }).then(() => {
+                    res.status(200).json({success: true});
+                }).catch(error => {
+                    databaseError(error);
+                });
+            } else {
+                authenticationError(res);
+            }
+        }).catch(error => {
+            databaseError(error);
+        })
+    });
     app.post("/complexhelp/provide/:complexHelpId", jsonParser, jwt({
         secret: SECRET_KEY,
         algorithms: ["HS256"]
@@ -76,7 +99,7 @@ export default function (app) {
         ComplexHelp.findByPk(complexHelpId).then(complexHelp => {
             complexHelp.update({
                 fulfillingUserId: userId
-            }).then(data => {
+            }).then(() => {
                 res.status(200).json({success: true});
             }).catch(error => {
                 databaseError(error);
@@ -84,5 +107,42 @@ export default function (app) {
         }).catch(error => {
             databaseError(error, res);
         })
-    })
+    });
+    app.post("/complexhelp/rescind/:complexHelpId", jsonParser, jwt({
+        secret: SECRET_KEY,
+        algorithms: ["HS256"]
+    }), (req, res) => {
+        let userId = req.user.id;
+        let complexHelpId = req.params["complexHelpId"];
+        ComplexHelp.findByPk(complexHelpId).then(complexHelp => {
+            if (complexHelp.getDataValue("requestingUserId") === userId || complexHelp.getDataValue("fulfillingUserId") === userId) {
+                ComplexHelp.destroy({
+                    where: {
+                        id: complexHelpId
+                    }
+                }).then(() => {
+                    res.status(200).json({success: true});
+                }).catch(error => {
+                    databaseError(error, res);
+                })
+            }
+        }).catch(error => {
+            databaseError(error, res)
+        })
+    });
+    app.post("/complexhelp/myHelpRequests", jsonParser, jwt({
+        secret: SECRET_KEY,
+        algorithms: ["HS256"]
+    }), (req, res) => {
+        let userId = req.user.id;
+        ComplexHelp.findAll({
+            where: {
+                requestingUserId: userId
+            }
+        }).then(data => {
+            res.status(200).json(data);
+        }).catch(error => {
+            databaseError(error);
+        })
+    });
 }

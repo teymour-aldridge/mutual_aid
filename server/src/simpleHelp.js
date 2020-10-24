@@ -1,6 +1,6 @@
-import {app, jsonParser, SECRET_KEY} from "./index";
-import {SimpleHelp, User} from "./models";
-import {authenticationError, databaseError} from "./errors";
+import {jsonParser, SECRET_KEY} from "./index.js";
+import {SimpleHelp, User} from "./models.js";
+import {authenticationError, databaseError} from "./errors.js";
 import sequelize, {Op} from "sequelize";
 import jwt from "express-jwt";
 
@@ -26,7 +26,8 @@ export default function (app) {
                 description,
                 fulfillingUser: null,
                 latitude,
-                longitude
+                longitude,
+                completed: false
             }).then(help => {
                 res.status(200);
                 res.json({
@@ -103,7 +104,8 @@ export default function (app) {
         let userId = req.user.id;
         let simpleHelpId = req.params["simpleHelpId"];
         SimpleHelp.findByPk(simpleHelpId).then(simpleHelp => {
-            if (simpleHelp.getDataValue("fulfillingUserId") === userId) {
+            if (simpleHelp.getDataValue("fulfillingUserId") === userId
+                || simpleHelp.getDataValue("requestingUserId") === userId) {
                 SimpleHelp.destroy({
                     where: {
                         id: simpleHelpId
@@ -123,6 +125,32 @@ export default function (app) {
             }
         }).catch(error => {
             databaseError(error, res);
+        })
+    })
+    app.post("/simplehelp/complete/:simpleHelpId", jwt({
+        secret: SECRET_KEY,
+        algorithms: ["HS256"]
+    }), jsonParser, (req, res) => {
+        let userId = req.user.id;
+        let simpleHelpId = req.params["simpleHelpId"];
+        SimpleHelp.findByPk(simpleHelpId).then(simpleHelp => {
+            if (simpleHelp.getDataValue("fulfillingUser") === userId) {
+                SimpleHelp.update({
+                    completed: true
+                }, {
+                    where: {
+                        id: simpleHelp.id
+                    }
+                }).then(() => {
+                    res.status(200).json({success: true});
+                }).catch(error => {
+                    databaseError(error, res);
+                })
+            } else {
+                authenticationError(res);
+            }
+        }).catch(error => {
+            databaseError(error, res)
         })
     })
     app.post("/simplehelp/currentlyFulfilling", jwt({

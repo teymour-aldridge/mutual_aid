@@ -10,7 +10,6 @@
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^8.4.1",
     "sequelize": "^6.3.5"
   },
   "devDependencies": {
@@ -22,6 +21,6 @@
   },
   "scripts": {
     "start": "yarn concurrently \"yarn run rollup --config rollup.config.js --watch\" \"yarn run forever -w bundle.js\"",
-    "run": "npm run rollup --config rollup.config.js; node bundle.js"
+    "run": "node bundle.js"
   }
 }

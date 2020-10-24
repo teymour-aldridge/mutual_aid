@@ -6,6 +6,6 @@
   "author": "teymour-aldridge <teymour.aldridge@icloud.com>",
   "license": "AGPL",
   "scripts": {
-    "postinstall": "cd client && npm install && npm run rollup --config rollup.config.js"
+    "postinstall": "cd server && npm install && npm run rollup --config rollup.config.js"
   }
 }

@@ -22,6 +22,6 @@
   },
   "scripts": {
     "start": "yarn concurrently \"yarn run rollup --config rollup.config.js --watch\" \"yarn run forever -w bundle.js\"",
-    "run": "yarn run rollup --config rollup.config.js; node bundle.js"
+    "run": "npm run rollup --config rollup.config.js; node bundle.js"
   }
 }

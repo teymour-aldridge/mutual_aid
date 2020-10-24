@@ -1,4 +1,4 @@
 cd client;
-yarn build;
+npm run-script build;
 cd ../
 mv client/build server

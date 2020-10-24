@@ -1,2 +1,2 @@
-deploy: build.sh
+release: build.sh
 web: (cd server && node bundle.js)

@@ -88,7 +88,7 @@ export default function (app) {
         let userId = req.user.id;
         let simpleHelpId = req.params["simpleHelpId"];
         SimpleHelp.findByPk(simpleHelpId).then(simpleHelp => {
-            simpleHelp.update({fulfillingUserId: userId}).then(() => {
+            simpleHelp.update({fulfillingUser: userId}).then(() => {
                 res.status(200);
             }).catch(error => {
                 databaseError(error, res)
@@ -104,8 +104,8 @@ export default function (app) {
         let userId = req.user.id;
         let simpleHelpId = req.params["simpleHelpId"];
         SimpleHelp.findByPk(simpleHelpId).then(simpleHelp => {
-            if (simpleHelp.getDataValue("fulfillingUserId") === userId
-                || simpleHelp.getDataValue("requestingUserId") === userId) {
+            if (simpleHelp.getDataValue("fulfillingUser") === userId
+                || simpleHelp.getDataValue("requestingUser") === userId) {
                 SimpleHelp.destroy({
                     where: {
                         id: simpleHelpId
@@ -156,17 +156,18 @@ export default function (app) {
     app.post("/simplehelp/currentlyFulfilling", jwt({
         secret: SECRET_KEY,
         algorithms: ["HS256"]
-    }), jsonParser, (req, res) => {
+    }), (req, res) => {
         let userId = req.user.id;
         SimpleHelp.findAll({
             where: {
-                fulfillingUserId: userId
+                fulfillingUser: userId
             }
         }).then(result => {
             res.status(200).json({
                 data: result
             })
         }).catch(error => {
+            console.log(error);
             databaseError(error, res);
         })
     })

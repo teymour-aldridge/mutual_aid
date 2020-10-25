@@ -49,6 +49,9 @@ export default function (app) {
                 where: {
                     requestingUserId: {
                         [Op.ne]: userId
+                    },
+                    fulfillingUserId: {
+                        [Op.eq]: null
                     }
                 }
             }]
@@ -63,6 +66,7 @@ export default function (app) {
                 })
             });
         }).catch(error => {
+            console.log(error);
             databaseError(error, res);
         });
     });

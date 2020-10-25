@@ -6,6 +6,7 @@ mv client/build server
 cd server
 npm install --global rollup
 npm install
+npm install esm
 npm install rollup-plugin-flow
 rollup --config rollup.config.js
 cd ../
